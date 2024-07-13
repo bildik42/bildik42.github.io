@@ -92,31 +92,13 @@
             navigator.serviceWorker.register('/service-worker.js')
                 .then(registration => {
                     console.log('Service Worker registered with scope:', registration.scope);
-                    
-                    // Service worker'ı güncellemeler için kontrol ediyoruz
-                    registration.onupdatefound = () => {
-                        const installingWorker = registration.installing;
-                        installingWorker.onstatechange = () => {
-                            if (installingWorker.state === 'installed') {
-                                if (navigator.serviceWorker.controller) {
-                                    // Yeni içerik kullanılabilir
-                                    console.log('New content is available; please refresh.');
-                                    // Kullanıcıya sayfayı yenilemesini bildirebilirsiniz
-                                    // Örneğin, bir toast veya modal ile
-                                } else {
-                                    // İçerik ilk kez cache'lendi
-                                    console.log('Content is cached for offline use.');
-                                }
-                            }
-                        };
-                    };
                 })
                 .catch(error => {
                     console.error('Service Worker registration failed:', error);
                 });
         });
     }
-</script>
+    </script>
 
     
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>

@@ -148,34 +148,35 @@
                 }
             }
 
-            const pageWidth = 210; // A4 width in mm
+                        const pageWidth = 210; // A4 width in mm
             const pageHeight = 297; // A4 height in mm
             const barcodeWidth = 35; // width of each barcode cell (3.5mm in PDF units)
             const barcodeHeight = 23.3; // height of each barcode cell (2.33mm in PDF units)
-            const marginTopBottom = 8.7; // margin from top and bottom
+            const marginTop = 9; // top margin
+            const marginBottom = 8; // bottom margin
             const columns = 6; // number of barcode columns on A4 (210 / 3.5)
-            const rowsPerPage = 12; // number of barcode rows on A4 (297 - 8.7*2) / 2.33
-
+            const rowsPerPage = Math.floor((pageHeight - marginTop - marginBottom) / barcodeHeight); // number of barcode rows on A4
+                    
             let pageNum = 0;
             for (let i = 0; i < barcodes.length; i++) {
                 if (i % (columns * rowsPerPage) === 0 && i !== 0) {
                     doc.addPage();
                     pageNum++;
                 }
-
+            
                 const x = (i % columns) * barcodeWidth;
-                const y = marginTopBottom + Math.floor((i / columns) % rowsPerPage) * barcodeHeight;
-
+                const y = marginTop + Math.floor((i / columns) % rowsPerPage) * barcodeHeight;
+            
                 const canvas = document.createElement('canvas');
                 JsBarcode(canvas, barcodes[i], {
                     format: "CODE128",
                     displayValue: true,
                     lineColor: "#000"
-                    
                 });
-
-                const imgData = canvas.toDataURL('image/png');
-                doc.addImage(imgData, 'PNG', x, y, barcodeWidth, barcodeHeight);
+            
+                // Adjust the barcode drawing logic to fit your needs
+                // You might need to adjust `doc` to your specific PDF library usage
+                doc.addImage(canvas.toDataURL("image/png"), 'PNG', x, y, barcodeWidth, barcodeHeight);
             }
 
             pdfData = doc.output('blob');

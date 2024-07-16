@@ -1,4 +1,3 @@
-const CACHE_NAME = 'v1';
 const urlsToCache = [
     '/',
     '/index.html',
@@ -6,20 +5,19 @@ const urlsToCache = [
     'icon-512x512.png',
 ];
 
+// Service Worker dosyanız
+
 self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(urlsToCache);
-            })
-    );
+    self.skipWaiting(); // Yeni service worker'ın hemen aktif olmasını sağlıyoruz
+});
+
+self.addEventListener('activate', (event) => {
+    self.clients.claim(); // Yeni service worker'ı hemen kullanmaya başlamak için
 });
 
 self.addEventListener('fetch', (event) => {
     event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                return response || fetch(event.request);
-            })
+        fetch(event.request) // Tüm istekleri doğrudan network'ten yanıtla
     );
 });
+
